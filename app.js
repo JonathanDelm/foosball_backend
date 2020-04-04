@@ -21,7 +21,7 @@ mongoose.connect((mongoLabUri || dataBaseConfig.db), {
 )
 
 // Set up express js port
-const matchRoute = require('../foosball_backend/routes/match.route')
+const matchRoute = require('./routes/match.route')
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
