@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start-local": "nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start-local": "nodemon",
+    "start": "node app.js"
   },
   "author": "Jonathan Delmeiren",
   "license": "ISC",
