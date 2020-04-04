@@ -5,9 +5,12 @@ cors = require('cors'),
 bodyParser = require('body-parser'),
 dataBaseConfig = require('./database/db');
 
+// Connect to the mlab database when running in production
+mongoLabUri = process.env.MONGOLAB_URI;
+
 // Connecting mongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect(dataBaseConfig.db, {
+mongoose.connect((mongoLabUri || dataBaseConfig.db), {
     useNewUrlParser: true
 }).then(() => {
     console.log('Database connected sucessfully ')
@@ -24,9 +27,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(cors());
-app.use(express.static(path.join(__dirname, 'dist/foosball')));
-app.use('/', express.static(path.join(__dirname, 'dist/foosball')));
+
+// Uit online demo (als alles in 1 project zou staan)
+// app.use(cors());
+// app.use(express.static(path.join(__dirname, 'dist/foosball')));
+// app.use('/', express.static(path.join(__dirname, 'dist/foosball')));
+
+// Uit hogent tutorial
+app.use(cors({origin: "*"}));
+
 app.use('/api', matchRoute)
 
 // Create port

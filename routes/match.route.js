@@ -40,31 +40,31 @@ matchRoute.route('/read-match/:id').get((req, res) => {
 
 
 // Update match
-matchRoute.route('/update-match/:id').put((req, res, next) => {
-  Match.findByIdAndUpdate(req.params.id, {
-    $set: req.body
-  }, (error, data) => {
-    if (error) {
-      return next(error);
-      console.log(error)
-    } else {
-      res.json(data)
-      console.log('Match successfully updated!')
-    }
-  })
-})
+// matchRoute.route('/update-match/:id').put((req, res, next) => {
+//   Match.findByIdAndUpdate(req.params.id, {
+//     $set: req.body
+//   }, (error, data) => {
+//     if (error) {
+//       return next(error);
+//       console.log(error)
+//     } else {
+//       res.json(data)
+//       console.log('Match successfully updated!')
+//     }
+//   })
+// })
 
 // Delete match
-matchRoute.route('/delete-match/:id').delete((req, res, next) => {
-  Match.findByIdAndRemove(req.params.id, (error, data) => {
-    if (error) {
-      return next(error);
-    } else {
-      res.status(200).json({
-        msg: data
-      })
-    }
-  })
-})
+// matchRoute.route('/delete-match/:id').delete((req, res, next) => {
+//   Match.findByIdAndRemove(req.params.id, (error, data) => {
+//     if (error) {
+//       return next(error);
+//     } else {
+//       res.status(200).json({
+//         msg: data
+//       })
+//     }
+//   })
+// })
 
 module.exports = matchRoute;
