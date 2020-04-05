@@ -67,4 +67,109 @@ matchRoute.route('/read-match/:id').get((req, res) => {
 //   })
 // })
 
+// Get all players who played at least 1 match
+matchRoute.route('/players').get((req, res) => {
+  Match.aggregate([
+    { $group: { 
+      "_id": { 
+        "players": ["$player1Team1", "$player2Team1", "$player1Team2", "$player2Team2"]
+      }
+    }},
+    { $unwind: '$_id.players' },
+    { $group: {_id: '$_id.players'} },
+    { $match: {_id: { $not: { $eq: ""} } } }
+  ], (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  });
+})
+
+// Get the number of solo matches per player
+matchRoute.route('/solo-matches').get((req, res) => {
+  Match.aggregate([
+    { $match: {player2Team1: ""} },
+    { $group: { 
+      "_id": { 
+        "players": ["$player1Team1", "$player1Team2"]
+      },
+      "count": { "$sum": 1 }
+    }},
+    { $unwind: '$_id.players' },
+    { $group: {_id: '$_id.players', count: {$sum: "$count"}} }
+  ], (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  });
+})
+
+// Get the number of solo wins per player
+matchRoute.route('/solo-wins').get((req, res) => {
+  Match.aggregate([
+    { $match: {player2Team1: ""} },
+    { $group: { 
+      "_id": "$player1Team1",
+      "count": { "$sum": 1 }
+    }}
+  ], (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  });
+})
+
+// Get the number of duo matches per player
+matchRoute.route('/duo-matches').get((req, res) => {
+  Match.aggregate([
+    { $match: {
+      $and: [ 
+        { player2Team1: { $not: { $eq: ""} } },
+        { player2Team2: { $not: { $eq: ""} } }
+      ]
+    } },
+    { $group: { 
+      "_id": { 
+        "players": ["$player1Team1", "$player2Team1", "$player1Team2", "$player2Team2"]
+      },
+      "count": { "$sum": 1 }
+    }},
+    { $unwind: '$_id.players' },
+    { $group: {_id: '$_id.players', count: {$sum: "$count"}} }
+  ], (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  });
+})
+
+// Get the number of duo wins per player
+matchRoute.route('/duo-wins').get((req, res) => {
+  Match.aggregate([
+    { $match: {player2Team1: { $not: { $eq: ""} } } },
+    { $group: { 
+      "_id": { 
+        "winners": ["$player1Team1", "$player2Team1"]
+      },
+      "count": { "$sum": 1 }
+    }},
+    { $unwind: '$_id.winners' },
+    { $group: {_id: '$_id.winners', count: {$sum: "$count"}} }
+  ], (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  });
+})
+
 module.exports = matchRoute;
