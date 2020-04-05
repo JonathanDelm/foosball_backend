@@ -3,22 +3,22 @@ const Schema = mongoose.Schema;
 
 // Define collection and schema
 let Match = new Schema({
-    player1Team1: {
+    winningPlayer1: {
         type: String
     },
-    player2Team1: {
+    winningPlayer2: {
         type: String
     },
-    player1Team2: {
+    losingPlayer1: {
         type: String
     },
-    player2Team2: {
+    losingPlayer2: {
         type: String
     },
-    scoreTeam1: {
+    scoreWinningTeam: {
         type: Number
     },
-    scoreTeam2: {
+    scoreLosingTeam: {
         type: Number
     },
     dateAdded: {

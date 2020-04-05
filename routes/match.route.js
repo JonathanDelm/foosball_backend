@@ -72,7 +72,7 @@ matchRoute.route('/players').get((req, res) => {
   Match.aggregate([
     { $group: { 
       "_id": { 
-        "players": ["$player1Team1", "$player2Team1", "$player1Team2", "$player2Team2"]
+        "players": ["$winningPlayer1", "$winningPlayer2", "$losingPlayer1", "$losingPlayer2"]
       }
     }},
     { $unwind: '$_id.players' },
@@ -90,10 +90,10 @@ matchRoute.route('/players').get((req, res) => {
 // Get the number of solo matches per player
 matchRoute.route('/solo-matches').get((req, res) => {
   Match.aggregate([
-    { $match: {player2Team1: ""} },
+    { $match: {winningPlayer2: ""} },
     { $group: { 
       "_id": { 
-        "players": ["$player1Team1", "$player1Team2"]
+        "players": ["$winningPlayer1", "$losingPlayer1"]
       },
       "count": { "$sum": 1 }
     }},
@@ -111,9 +111,9 @@ matchRoute.route('/solo-matches').get((req, res) => {
 // Get the number of solo wins per player
 matchRoute.route('/solo-wins').get((req, res) => {
   Match.aggregate([
-    { $match: {player2Team1: ""} },
+    { $match: {winningPlayer2: ""} },
     { $group: { 
-      "_id": "$player1Team1",
+      "_id": "$winningPlayer1",
       "count": { "$sum": 1 }
     }}
   ], (error, data) => {
@@ -130,13 +130,13 @@ matchRoute.route('/duo-matches').get((req, res) => {
   Match.aggregate([
     { $match: {
       $and: [ 
-        { player2Team1: { $not: { $eq: ""} } },
-        { player2Team2: { $not: { $eq: ""} } }
+        { winningPlayer2: { $not: { $eq: ""} } },
+        { losingPlayer2: { $not: { $eq: ""} } }
       ]
     } },
     { $group: { 
       "_id": { 
-        "players": ["$player1Team1", "$player2Team1", "$player1Team2", "$player2Team2"]
+        "players": ["$winningPlayer1", "$winningPlayer2", "$losingPlayer1", "$losingPlayer2"]
       },
       "count": { "$sum": 1 }
     }},
@@ -154,10 +154,10 @@ matchRoute.route('/duo-matches').get((req, res) => {
 // Get the number of duo wins per player
 matchRoute.route('/duo-wins').get((req, res) => {
   Match.aggregate([
-    { $match: {player2Team1: { $not: { $eq: ""} } } },
+    { $match: {winningPlayer2: { $not: { $eq: ""} } } },
     { $group: { 
       "_id": { 
-        "winners": ["$player1Team1", "$player2Team1"]
+        "winners": ["$winningPlayer1", "$winningPlayer2"]
       },
       "count": { "$sum": 1 }
     }},
