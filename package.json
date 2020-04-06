@@ -4,6 +4,7 @@
   "main": "app.js",
   "scripts": {
     "start-local": "nodemon",
+    "start-local-db": "mongod",
     "start": "node app.js"
   },
   "author": "Jonathan Delmeiren",

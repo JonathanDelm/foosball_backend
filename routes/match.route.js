@@ -55,17 +55,17 @@ matchRoute.route('/read-match/:id').get((req, res) => {
 // })
 
 // Delete match
-// matchRoute.route('/delete-match/:id').delete((req, res, next) => {
-//   Match.findByIdAndRemove(req.params.id, (error, data) => {
-//     if (error) {
-//       return next(error);
-//     } else {
-//       res.status(200).json({
-//         msg: data
-//       })
-//     }
-//   })
-// })
+matchRoute.route('/delete-match/:id').delete((req, res, next) => {
+  Match.findByIdAndRemove(req.params.id, (error, data) => {
+    if (error) {
+      return next(error);
+    } else {
+      res.status(200).json({
+        msg: data
+      })
+    }
+  })
+})
 
 // Get all players who played at least 1 match
 matchRoute.route('/players').get((req, res) => {
